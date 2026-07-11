@@ -1,3 +1,13 @@
+/* --- SCALE TO FIT --- */
+function fitContentToViewport() {
+    const wrapper = document.getElementById('scale-wrapper');
+    wrapper.style.transform = 'scale(1)';
+    const contentHeight = wrapper.scrollHeight;
+    const availableHeight = window.innerHeight - 20;
+    const scale = Math.min(1, availableHeight / contentHeight);
+    wrapper.style.transform = `scale(${scale})`;
+}
+
 /* --- CLOCK --- */
 function updateClock() {
     const now = new Date();
@@ -177,10 +187,14 @@ function initHDBCLogo() { hdbLogo = new HDBCLogo(); }
 window.addEventListener('load', () => {
     updateClock();
     checkJellyfin();
+    fitContentToViewport();
     const logoImg = document.getElementById('hdb-logo');
     if (logoImg.complete) { initHDBCLogo(); } else { logoImg.onload = initHDBCLogo; }
 });
 
-window.addEventListener('resize', () => { if (hdbLogo) hdbLogo.handleResize(); });
+window.addEventListener('resize', () => {
+    if (hdbLogo) hdbLogo.handleResize();
+    fitContentToViewport();
+});
 setInterval(updateClock, 1000);
 setInterval(checkJellyfin, 30000);
